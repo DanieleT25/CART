@@ -1,0 +1,2 @@
+SELECT *
+FROM ML.EVALUATE(MODEL {DATASET}.rfm_clusters);
