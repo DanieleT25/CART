@@ -7,3 +7,7 @@
 ### Getting Started
 
 For a comprehensive, step-by-step guide on how to configure the Google Cloud environment and reproduce the entire pipeline, please refer to the **[Setup Guide](./docs/setup.md)**.
+
+### Dashboard
+
+To view the dashboard, visit [link](https://datastudio.google.com/reporting/af24e783-7d7a-4c72-b2cc-e2d318e47112).
