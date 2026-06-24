@@ -24,4 +24,4 @@ This directory contains the advanced SQL queries used to extract actionable busi
 
 ## Usage
 
-All queries are written in **Google Standard SQL**. They can be executed directly within the BigQuery Console or imported as *Custom SQL Data Sources* in Looker Studio for live visualization.
+All queries are written in **Google Standard SQL**. They can be executed directly within the BigQuery Console or imported as *Custom SQL Data Sources* in Data Studio for live visualization.
