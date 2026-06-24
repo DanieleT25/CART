@@ -1,6 +1,6 @@
 # Analytical Queries
 
-This directory contains the advanced SQL queries used to extract actionable business insights from the BigQuery Star Schema. These scripts serve as the analytical core of the C.A.R.T. project, powering the interactive Looker Studio dashboard and providing the foundational datasets for the Machine Learning models.
+This directory contains the advanced SQL queries used to extract actionable business insights from the BigQuery Star Schema. These scripts serve as the analytical core of the C.A.R.T. project, powering the interactive Data Studio dashboard and providing the foundational datasets for the Machine Learning models.
 
 ## Query Inventory
 
