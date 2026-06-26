@@ -47,7 +47,6 @@ python3 -m venv venvCART
 source venvCART/bin/activate
 
 pip install --upgrade pip
-pip install jupyterlab pyarrow db-dtypes google-cloud-bigquery google-cloud-storage
 pip install -r requirements.txt
 
 python3 src/download_data.py
