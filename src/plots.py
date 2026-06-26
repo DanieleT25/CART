@@ -3,6 +3,8 @@ import seaborn as sns
 from matplotlib.ticker import PercentFormatter
 import pandas as pd
 import matplotlib.colors as mcolors
+import matplotlib.cm as cm
+
 
 def plot_revenue_trend(df_trend):
     sns.set_theme(style="whitegrid")
@@ -54,26 +56,62 @@ def plot_geographic_AOV(df_geographic):
     sns.set_theme(style="whitegrid")
 
     # Filter out the United Kingdom and Unspecified to focus exclusively on international markets
-    df_international = df_geographic[(df_geographic['country'] != 'United Kingdom') & (df_geographic['country'] != 'Unspecified')].head(10)
+    df_international = df_geographic[(df_geographic['country'] != 'United Kingdom') & 
+                                     (df_geographic['country'] != 'Unspecified')].head(10).copy()
 
     # Create a single plot figure
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(12, 7))
 
-    sns.barplot(
+    # --- Bivariate Color Mapping based on Total Orders ---
+    # Normalize the order values between 0 and 1 for the colormap
+    norm = mcolors.Normalize(vmin=df_international['total_orders'].min(), 
+                             vmax=df_international['total_orders'].max())
+    
+    # Choose the 'Oranges' colormap (higher values will be darker)
+    cmap = cm.get_cmap('Oranges')
+    
+    # Generate the exact list of colors for each country based on its total orders
+    custom_colors = [cmap(norm(val)) for val in df_international['total_orders']]
+
+    # Create the horizontal barplot
+    ax = sns.barplot(
         data=df_international,
         x='total_revenue',
         y='country',
-        palette='Oranges_r'
+        palette=custom_colors,
+        hue='country', # Added to avoid warnings in newer versions of Seaborn
+        legend=False
     )
     
-    plt.title('Top 10 International Markets by Revenue (Excluding UK and Unspecified)', fontsize=13, fontweight='bold', pad=15)
-    plt.xlabel('Total Revenue (£)', fontsize=11)
-    plt.ylabel('Country', fontsize=11)
+    # Add the AOV and total orders text next to each bar
+    for i, p in enumerate(ax.patches):
+        aov_val = df_international.iloc[i]['average_order_value']
+        ord_val = df_international.iloc[i]['total_orders']
+        
+        # Print the extra values to the right of the bar
+        ax.annotate(f' AOV: £{aov_val} | Orders: {ord_val}', 
+                    (p.get_width(), p.get_y() + p.get_height() / 2.), 
+                    va='center', xytext=(5, 0), textcoords='offset points', 
+                    fontsize=10, fontweight='500', color='#333333')
+        
+    # Extend the X-axis limit slightly to make room for the text annotations
+    ax.set_xlim(0, ax.get_xlim()[1] * 1.25)
+
+    # Titles and labels
+    plt.title('Top 10 International Markets: Revenue vs Order Volume', 
+              fontsize=14, fontweight='bold', pad=15)
+    plt.xlabel('Total Revenue (£) - (Bar Length)', fontsize=11, fontweight='bold')
+    plt.ylabel('Country', fontsize=11, fontweight='bold')
     
     # Format numbers on the X-axis with a thousands separator
     plt.gca().xaxis.set_major_formatter(plt.FuncFormatter(lambda x, loc: "{:,}".format(int(x))))
 
-    # Layout optimization to prevent text clipping
+    # Add a footnote to explain the bivariate visual encoding
+    plt.figtext(0.15, 0.01, 
+                "Visual Note: Bar length indicates Total Revenue. Color intensity represents the volume of Total Orders.", 
+                fontsize=9, style='italic', color='gray')
+
+    # Layout optimization
     plt.tight_layout()
     plt.show()
 
